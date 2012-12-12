@@ -1,20 +1,26 @@
 <VirtualHost *:<%= port %>>
   ServerName <%= name %>
+
 <% if serveraliases.is_a? Array -%>
-<% serveraliases.each do |name| -%><%= "  ServerAlias #{name}\n"%><% end -%>
+<% serveraliases.each do |name| -%><%= "  ServerAlias #{name}\n" %><% end -%>
 <% elsif serveraliases != '' -%>
 <%= "  ServerAlias #{serveraliases}" -%>
 <% end -%>
+
   DocumentRoot <%= docroot %>
+
   EnableSendfile off
+
   <Directory <%= docroot %>>
     Options <%= options %>
     AllowOverride All
     Order allow,deny
     allow from all
   </Directory>
-  ErrorLog <%= logdir %>/<%= name %>_error.log
+
   LogLevel warn
+  ErrorLog <%= logdir %>/<%= name %>_error.log
   CustomLog <%= logdir %>/<%= name %>_access.log combined
+
   ServerSignature Off
 </VirtualHost>
