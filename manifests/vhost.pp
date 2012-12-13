@@ -2,28 +2,19 @@ define apache::vhost(
     $port,
     $parents='',
     $docroot,
-    $logdir="/var/log/apache2",
+    $logdir='/var/log/apache2',
     $ssl=true,
-    $template="apache/vhost.conf.erb",
+    $template='apache/vhost.conf.erb',
     $priority,
     $serveraliases='',
-    $options="Indexes FollowSymLinks MultiViews",
+    $options='Indexes FollowSymLinks MultiViews',
 ) {
 
   include apache
 
-  File {
-    owner   => "root",
-    group   => "root",
-    require => $parents ? {
-      ''      => [],
-      default => [File[$parents]]
-    },
-  }
-
   file { "/etc/apache2/sites-enabled/${priority}-${name}":
     content => template($template),
-    mode    => 0777,
+    mode    => 0744,
     require => [Class["apache::install"]],
     notify  => [Class["apache::service"]],
   }
@@ -31,6 +22,8 @@ define apache::vhost(
   if ($parents != '') {
     file { $parents:
       ensure  => directory,
+      owner   => 'root',
+      group   => 'root',
       mode    => 0755,
       require => [],
     }
@@ -39,10 +32,16 @@ define apache::vhost(
   file { "${docroot}":
     ensure  => directory,
     mode    => 0755,
+    require => $parents ? {
+      ''      => [],
+      default => [File[$parents]]
+    },
   }
 
   file { "${logdir}":
     ensure => directory,
+    owner  => 'root',
+    group  => 'root',
     mode   => 0755,
   }
 
