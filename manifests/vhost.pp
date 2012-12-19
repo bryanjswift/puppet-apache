@@ -8,6 +8,7 @@ define apache::vhost(
   $priority,
   $serveraliases = '',
   $options       = 'Indexes FollowSymLinks MultiViews',
+  $override      = 'All',
   $owner         = false,
   $group         = false,
 ) {
@@ -21,6 +22,8 @@ define apache::vhost(
   if ($group) {
     File { group => $group }
   }
+
+  validate_re($override, '^(All|None)$', 'The $override value must be All or None.')
 
   file { "/etc/apache2/sites-enabled/${priority}-${name}":
     content => template($template),

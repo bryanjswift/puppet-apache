@@ -13,7 +13,7 @@
 
   <Directory <%= docroot %>>
     Options <%= options %>
-    AllowOverride All
+    AllowOverride <%= override %>
     Order allow,deny
     allow from all
   </Directory>
