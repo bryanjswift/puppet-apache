@@ -23,8 +23,6 @@ define apache::vhost(
     File { group => $group }
   }
 
-  validate_re($override, '^(All|None)$', 'The $override value must be All or None.')
-
   file { "/etc/apache2/sites-enabled/${priority}-${name}":
     content => template($template),
     owner   => 'root',
