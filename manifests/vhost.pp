@@ -28,7 +28,7 @@ define apache::vhost(
     owner   => 'root',
     group   => 'root',
     mode    => 0744,
-    require => [Class["apache::install"]],
+    require => [File[$docroot], File[$logdir], Class["apache::install"]],
     notify  => [Class["apache::service"]],
   }
 
